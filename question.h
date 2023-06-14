@@ -14,7 +14,7 @@ struct Question
         : expr(expr), result(result){};
 
     static Question generateSimple();
-    static Question generateHard();
+    static Question generateMixed();
 };
 
 vector<Question> generateSimpleQuestions(int number);

@@ -1,84 +1,103 @@
-#include "expr.h"
+#include <iostream>
 #include <cctype>
-#include <stack>
 
-double evaluateNode(const Expr* node)
-{
-  if (node->value == "+")
-    return evaluateNode(node->left) + evaluateNode(node->right);
-  if (node->value == "-")
-    return evaluateNode(node->left) - evaluateNode(node->right);
-  if (node->value == "*")
-    return evaluateNode(node->left) * evaluateNode(node->right);
-  if (node->value == "/")
-    return evaluateNode(node->left) / evaluateNode(node->right);
-  return std::stoi(node->value);
+using namespace std;
+
+bool eval_expr(const char **pe, int &lhs, bool inside = false);
+char skip_ws(const char **pe);
+bool eval_prim(const char **pe, int &res);
+bool eval_term(const char **pe, int &res);
+bool eval_factor(const char **pe, int &res);
+
+char skip_ws(const char **pe) {
+  while (**pe == ' ') ++(*pe);
+  return **pe;
 }
 
-double Expr::evaluate() const
-{
-  return evaluateNode(this);
-}
-
-std::string Expr::toString() const
-{
-  if (left == nullptr && right == nullptr) {
-    return value;
-  } else {
-    return "(" + left->toString() + " " + value + " " + right->toString() + ")";
+bool eval_prim(const char **pe, int &res) {
+  char c = skip_ws(pe);
+  if (c == '(') {
+    ++(*pe);
+    if (!eval_expr(pe, res, true)) return false;
+    ++(*pe);
+    return true;
   }
+  if (isdigit(c)) {
+    res = 0;
+    while (isdigit(c)) {
+      res = 10 * res + c - '0';
+      c = *(++(*pe));
+    }
+    return true;
+  }
+  return false;
 }
 
-Expr* parseExpression(const std::string& expr)
-{
-  std::stack<Expr*> exprStack;
-  std::stack<char> opStack;
-
-  std::string num;
-  for (char c : expr) {
-    if (std::isdigit(c)) {
-      num += c;
-    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      if (!num.empty()) {
-        exprStack.push(new Expr(num));
-        num.clear();
-      }
-      while (!opStack.empty() && (opStack.top() == '*' || opStack.top() == '/')) {
-        Expr* right = exprStack.top();
-        exprStack.pop();
-        Expr* left = exprStack.top();
-        exprStack.pop();
-        Expr* op = new Expr(std::string(1, opStack.top()));
-        op->left = left;
-        op->right = right;
-        exprStack.push(op);
-        opStack.pop();
-      }
-      opStack.push(c);
+bool eval_factor(const char **pe, int &res) {
+  if (!eval_term(pe, res)) return false;
+  char op;
+  while ((op = skip_ws(pe)) && (op == '+' || op == '-')) {
+    ++(*pe);
+    int rhs;
+    if (!eval_term(pe, rhs)) return false;
+    switch (op) {
+      case '+':
+        res += rhs;
+        break;
+      case '-':
+        res -= rhs;
+        break;
     }
   }
-  if (!num.empty()) {
-    exprStack.push(new Expr(num));
-  }
-  while (!opStack.empty()) {
-    Expr* right = exprStack.top();
-    exprStack.pop();
-    Expr* left = exprStack.top();
-    exprStack.pop();
-    Expr* op = new Expr(std::string(1, opStack.top()));
-    op->left = left;
-    op->right = right;
-    exprStack.push(op);
-    opStack.pop();
-  }
-
-  return exprStack.top();
+  return true;
 }
 
-double evaluateExpression(const std::string& expr)
-{
-  Expr* root = parseExpression(expr);
-  double result = root->evaluate();
-  delete root;
-  return result;
+bool eval_term(const char **pe, int &res) {
+  if (!eval_prim(pe, res)) return false;
+  char op;
+  while ((op = skip_ws(pe)) && (op == '*' || op == '/')) {
+    ++(*pe);
+    int rhs;
+    if (!eval_prim(pe, rhs)) return false;
+    switch (op) {
+      case '*':
+        res *= rhs;
+        break;
+      case '/':
+        res /= rhs;
+        break;
+    }
+  }
+  return true;
+}
+
+bool eval_expr(const char **pe, int &lhs, bool inside) {
+  if (!eval_factor(pe, lhs)) return false;
+  char op;
+  while ((op = skip_ws(pe)) && (op == '+' || op == '-')) {
+    ++(*pe);
+    int rhs;
+    if (!eval_factor(pe, rhs)) return false;
+    switch (op) {
+      case '+':
+        lhs += rhs;
+        break;
+      case '-':
+        lhs -= rhs;
+        break;
+    }
+  }
+  return inside ? op == ')' : !op;
+}
+
+bool evaluate(const char *e, int &result) {
+  return eval_expr(&e, result);
+}
+
+double evalExpr(const string &expr) {
+  // Convert string to C-style string
+  const char *exprCString = expr.c_str();
+  int result;
+  evaluate(exprCString, result);
+  return static_cast<double>(result);
 }
