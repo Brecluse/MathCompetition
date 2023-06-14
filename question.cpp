@@ -51,7 +51,7 @@ Question Question::generateSimple()
 
     // Construct the expression string
     expression = generateExpression(operand1, operand2, op);
-    int result = solveExpression(expression);
+    int result = evaluateExpression(expression);
     cout << Expr(expression).toString() << " = " << result << endl;
     return Question(expression, result);
 }

@@ -1,160 +1,84 @@
 #include "expr.h"
-#include <iostream>
-#include <sstream>
-#include <queue>
+#include <cctype>
+#include <stack>
 
-queue<string> lexer(const string &expression)
+double evaluateNode(const Expr* node)
 {
-    queue<string> tokens;
-    stringstream ss(expression);
-    string token;
-
-    while (ss >> token)
-    {
-        tokens.push(token);
-    }
-
-    return tokens;
+  if (node->value == "+")
+    return evaluateNode(node->left) + evaluateNode(node->right);
+  if (node->value == "-")
+    return evaluateNode(node->left) - evaluateNode(node->right);
+  if (node->value == "*")
+    return evaluateNode(node->left) * evaluateNode(node->right);
+  if (node->value == "/")
+    return evaluateNode(node->left) / evaluateNode(node->right);
+  return std::stoi(node->value);
 }
 
-Expr *parser(queue<string> &tokens)
+double Expr::evaluate() const
 {
-    if (tokens.empty())
-    {
-        return NULL;
-    }
-
-    queue<Expr *> nodeQueue;
-
-    while (!tokens.empty())
-    {
-        string token = tokens.front();
-        tokens.pop();
-
-        Expr *node = new Expr(token);
-
-        if (token == "+" || token == "-" || token == "*" || token == "/")
-        {
-            if (nodeQueue.size() < 2)
-            {
-                // Not enough operands for the operator, handle error
-                // For simplicity, let's delete the created nodes and return nullptr
-                delete node;
-                while (!nodeQueue.empty())
-                {
-                    delete nodeQueue.front();
-                    nodeQueue.pop();
-                }
-                return NULL;
-            }
-
-            node->right = nodeQueue.front();
-            nodeQueue.pop();
-            node->left = nodeQueue.front();
-            nodeQueue.pop();
-        }
-
-        nodeQueue.push(node);
-    }
-
-    if (nodeQueue.size() != 1)
-    {
-        // Invalid expression, handle error
-        // For simplicity, let's delete the created nodes and return nullptr
-        while (!nodeQueue.empty())
-        {
-            delete nodeQueue.front();
-            nodeQueue.pop();
-        }
-        return NULL;
-    }
-
-    return nodeQueue.front();
+  return evaluateNode(this);
 }
 
-// Evaluate the expression tree
-double evaluateExpression(Expr *node)
+std::string Expr::toString() const
 {
-    if (node == NULL)
-    {
-        return 0.0;
-    }
-
-    if (node->left == NULL && node->right == NULL)
-    {
-        std::istringstream iss(node->value);
-        double value;
-        iss >> value;
-        return value;
-    }
-
-    double leftValue = evaluateExpression(node->left);
-    double rightValue = evaluateExpression(node->right);
-
-    if (node->value == "+")
-    {
-        return leftValue + rightValue;
-    }
-    else if (node->value == "-")
-    {
-        return leftValue - rightValue;
-    }
-    else if (node->value == "*")
-    {
-        return leftValue * rightValue;
-    }
-    else if (node->value == "/")
-    {
-        if (rightValue == 0.0)
-        {
-            // Handle division by zero error
-            throw "Division by zero!";
-        }
-        return rightValue / leftValue;
-    }
-
-    return 0.0;
+  if (left == nullptr && right == nullptr) {
+    return value;
+  } else {
+    return "(" + left->toString() + " " + value + " " + right->toString() + ")";
+  }
 }
 
-double Expr::evaluate()
+Expr* parseExpression(const std::string& expr)
 {
-    return evaluateExpression(this);
-}
+  std::stack<Expr*> exprStack;
+  std::stack<char> opStack;
 
-// Function to solve the expression
-double solveExpression(const string &expr)
-{
-    queue<string> tokens = lexer(expr);
-    Expr *root = parser(tokens);
-    double result = root->evaluate();
-    return result;
-}
-
-void toStringHelper(const Expr *expr, ostringstream &oss)
-{
-    if (expr->left == NULL && expr->right == NULL)
-    {
-        oss << expr->value;
+  std::string num;
+  for (char c : expr) {
+    if (std::isdigit(c)) {
+      num += c;
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      if (!num.empty()) {
+        exprStack.push(new Expr(num));
+        num.clear();
+      }
+      while (!opStack.empty() && (opStack.top() == '*' || opStack.top() == '/')) {
+        Expr* right = exprStack.top();
+        exprStack.pop();
+        Expr* left = exprStack.top();
+        exprStack.pop();
+        Expr* op = new Expr(std::string(1, opStack.top()));
+        op->left = left;
+        op->right = right;
+        exprStack.push(op);
+        opStack.pop();
+      }
+      opStack.push(c);
     }
-    else
-    {
-        oss << "(";
-        if (expr->left != NULL)
-        {
-            toStringHelper(expr->left, oss);
-        }
-        oss << " " << expr->value << " ";
-        if (expr->right != NULL)
-        {
-            toStringHelper(expr->right, oss);
-        }
-        oss << ")";
-    }
+  }
+  if (!num.empty()) {
+    exprStack.push(new Expr(num));
+  }
+  while (!opStack.empty()) {
+    Expr* right = exprStack.top();
+    exprStack.pop();
+    Expr* left = exprStack.top();
+    exprStack.pop();
+    Expr* op = new Expr(std::string(1, opStack.top()));
+    op->left = left;
+    op->right = right;
+    exprStack.push(op);
+    opStack.pop();
+  }
+
+  return exprStack.top();
 }
 
-string Expr::toString() const
+double evaluateExpression(const std::string& expr)
 {
-    ostringstream oss;
-    toStringHelper(this, oss);
-    return oss.str();
+  Expr* root = parseExpression(expr);
+  double result = root->evaluate();
+  delete root;
+  return result;
 }
