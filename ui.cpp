@@ -1,7 +1,7 @@
 #include "ui.h"
 #include "user.h"
 #include "question.h"
-#include "result.h"
+#include "record.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>

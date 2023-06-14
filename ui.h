@@ -2,7 +2,7 @@
 #define UI_H
 
 #include "user.h"
-#include "result.h"
+#include "record.h"
 #include <vector>
 
 User loginOrSignup(vector<User> &users);

@@ -1,4 +1,4 @@
-#include "result.h"
+#include "record.h"
 #include <cstdio>
 #include <cstdlib>
 

@@ -1,7 +1,7 @@
 #include "ui.h"
 #include "question.h"
 #include "expr.h"
-#include "result.h"
+#include "record.h"
 #include <stdio.h>
 #include <cstdlib>
 #include <ctime>

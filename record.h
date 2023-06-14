@@ -1,5 +1,5 @@
-#ifndef RESULT_H
-#define RESULT_H
+#ifndef RECORD_H
+#define RECORD_H
 
 #include <fstream>
 #include <vector>
@@ -26,4 +26,4 @@ struct Record {
   static void readFromFile(vector<Record> &records, const std::string &filename);
 };
 
-#endif /* RESULT_H */
+#endif /* RECORD_H */

@@ -6,7 +6,7 @@ add_executable(
     MathComp
     main.cpp
     ui.h ui.cpp
-    result.h result.cpp
+        record.h record.cpp
     user.h user.cpp
     question.h question.cpp
     expr.h expr.cpp
