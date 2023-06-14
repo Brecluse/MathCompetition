@@ -27,6 +27,7 @@ int main() {
     displayMainMenu(); // 显示主菜单
     cout << "请输入选项：";
     cin >> choice;
+    cin.ignore();
     if (choice == 0) {
       printf("感谢使用数学口算比赛系统！再见！\n");
       break;

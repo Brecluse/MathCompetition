@@ -25,6 +25,7 @@ User inputUser() {
   cin >> user.username;
   printf("请输入年级：");
   cin >> user.grade;
+  cin.ignore();
   printf("请输入学校：");
   cin >> user.school;
   return user;
@@ -38,12 +39,13 @@ User loginOrSignup(vector<User> &users) {
     int c;
     cout << "请输入选项：";
     cin >> c;
+    cin.ignore();
 
     if (c == 1) {
       string name;
       cout << "请输入用户名：";
       cin >> name;
-      for (size_t i = 0; i < users.size(); ++i) {
+      for (int i = 0; i < users.size(); ++i) {
         User &u = users[i];
         if (u.username == name) {
           cout << "登录成功 " << u.username << endl;
@@ -77,13 +79,14 @@ Record startCompetition(vector<Question> &questions) {
   for (int i = 0; i < questions.size(); i++) {
     clearScreen();
     printf("===== 四则简单运算比赛 =====\n");
-    cout << "每题做对得5分，做错扣5分，当前得分" << score << endl;
+    cout << "每题做对得5分，做错扣5分，当前得分 " << score << endl;
 
     Question &q = questions[i];
     cout << "题目 [" << i + 1 << "] " << q.expr << endl;
     printf("请输入答案：");
     int userAnswer;
     cin >> userAnswer;
+    cin.ignore();
 
     if (q.result == userAnswer) {
       score += 5; // 做对一题加5分
@@ -91,9 +94,6 @@ Record startCompetition(vector<Question> &questions) {
       score -= 5; // 做错一题减5分
       cout << "正确答案是 " << q.result << endl;
     }
-
-    getchar();
-    getchar();
   }
 
   time_t endTime = time(NULL);                         // 记录结束时间
@@ -125,7 +125,7 @@ void startCompetition(User &user, vector<Record> &results) {
 }
 
 void viewPersonalHistory(User &user, vector<Record> &records) {
-  if(records.empty()){
+  if (records.empty()) {
     cout << user.username << " 没有参赛记录。" << endl;
     return;
   }
