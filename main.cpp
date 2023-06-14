@@ -17,10 +17,8 @@ int main() {
   User::readFromFile(users, userStorage);
   User user = loginOrSignup(users);
   User::saveToFile(users, userStorage);
-  fs::create_directories(fs::path(recordStorageDir));
-
-  string recordsPath = recordStorageDir + user.username + ".bin";
-
+  string recordsPath = recordStorageDir + user.school + "/" + user.username + ".bin";
+  fs::create_directories(fs::path(recordsPath).parent_path());
   vector<Record> records;
   Record::readFromFile(records, recordsPath);
 
@@ -35,11 +33,11 @@ int main() {
     }
     switch (choice) {
       case 1:
-        startCompetition(user, records); // 开始比赛
+        startCompetition(records); // 开始比赛
         Record::saveToFile(records, recordsPath);
         break;
       case 2:
-        viewPersonalHistory(records); // 查看比赛结果
+        viewPersonalHistory(user, records); // 查看比赛结果
         break;
       default:
         printf("无效的选项，请重新输入。\n");

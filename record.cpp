@@ -12,8 +12,8 @@ void Record::deserialize(ifstream &stream) {
   stream.read(reinterpret_cast<char *>(&elapsedTime), sizeof(elapsedTime));
 }
 
-void Record::saveToFile(const std::vector<Record> &records, const std::string &filename) {
-  std::ofstream file(filename, std::ios::binary);
+void Record::saveToFile(const vector<Record> &records, const string &filename) {
+  ofstream file(filename, ios::binary);
   if (file.is_open()) {
     for (size_t i = 0; i < records.size(); i++) {
       records[i].serialize(file);
@@ -22,8 +22,8 @@ void Record::saveToFile(const std::vector<Record> &records, const std::string &f
   }
 }
 
-void Record::readFromFile(std::vector<Record> &records, const std::string &filename) {
-  std::ifstream file(filename, std::ios::binary);
+void Record::readFromFile(vector<Record> &records, const string &filename) {
+  ifstream file(filename, ios::binary);
   if (file.is_open()) {
     while (file.peek() != EOF) {
       Record record;

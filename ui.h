@@ -11,9 +11,9 @@ void clearScreen();
 
 void displayMainMenu();
 
-void startCompetition(User &user, vector<Record> &results);
+void startCompetition(vector<Record> &results);
 
-void viewPersonalHistory(vector<Record> &records);
+void viewPersonalHistory(User &user,vector<Record> &records);
 
 // int addUser(User*);
 
