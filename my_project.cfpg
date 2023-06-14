@@ -1,0 +1,13 @@
+<Projects version="2.0">
+	<Project active="1">my_project.cfp</Project>
+	<File active="0">user.h</File>
+	<File active="0">main.cpp</File>
+	<File active="0">result.cpp</File>
+	<File active="0">ui.cpp</File>
+	<File active="0">question.cpp</File>
+	<File active="0">expr.h</File>
+	<File active="0">C:\PROGRA~2\C-FREE~1\mingw\include\C__~1\348B92~1.5\iostream</File>
+	<File active="1">expr.cpp</File>
+	<File active="0">ui.h</File>
+	<File active="0">result.h</File>
+</Projects>
