@@ -1,16 +1,28 @@
 #include "ui.h"
 #include "question.h"
 #include "expr.h"
+#include "result.h"
 #include <stdio.h>
 #include <cstdlib>
 #include <ctime>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+const string userStorage = "users.bin";
+const string recordStorageDir = "records/";
 
 int main() {
   srand(time(NULL));
   vector<User> users;
-  User::readFromFile(users, "users.bin");
+  User::readFromFile(users, userStorage);
   User user = loginOrSignup(users);
-  User::saveToFile(users, "users.bin");
+  User::saveToFile(users, userStorage);
+  fs::create_directories(fs::path(recordStorageDir));
+
+  string recordsPath = recordStorageDir + user.username + ".bin";
+
+  vector<Record> records;
+  Record::readFromFile(records, recordsPath);
 
   while (true) {
     int choice;
@@ -18,29 +30,16 @@ int main() {
     cout << "请输入选项：";
     cin >> choice;
     if (choice == 0) {
+      printf("感谢使用数学口算比赛系统！再见！\n");
       break;
     }
     switch (choice) {
       case 1:
-        startCompetition(); // 开始比赛
+        startCompetition(user, records); // 开始比赛
+        Record::saveToFile(records, recordsPath);
         break;
       case 2:
-        viewResults(); // 查看比赛结果
-        break;
-      case 3:
-        viewPersonalHistory(); // 查看个人历史比赛结果
-        break;
-      case 4:
-        viewSchoolResults(); // 以学校为单位查看学校总成绩
-        break;
-      case 5:
-        setDifficultyLevel(); // 设置参赛者年级难度级别
-        break;
-      case 6:
-        setQuestionTime(); // 设置每题的答题时间
-        break;
-      case 0:
-        printf("感谢使用数学口算比赛系统！再见！\n");
+        viewPersonalHistory(records); // 查看比赛结果
         break;
       default:
         printf("无效的选项，请重新输入。\n");

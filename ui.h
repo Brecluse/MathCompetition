@@ -2,21 +2,18 @@
 #define UI_H
 
 #include "user.h"
+#include "result.h"
 #include <vector>
 
-User loginOrSignup(vector<User>& users);
+User loginOrSignup(vector<User> &users);
+
 void clearScreen();
+
 void displayMainMenu();
-void startCompetition();
-void viewResults();
-void viewPersonalHistory();
-void viewSchoolResults();
-void setDifficultyLevel();
-void setQuestionTime();
-void updateResult(int totalScore, int totalTime);
-void displayResult();
-void displayPersonalHistory();
-void displaySchoolResults();
+
+void startCompetition(User &user, vector<Record> &results);
+
+void viewPersonalHistory(vector<Record> &records);
 
 // int addUser(User*);
 

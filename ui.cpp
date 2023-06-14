@@ -66,14 +66,11 @@ User loginOrSignup(vector<User> &users) {
 void displayMainMenu() {
   cout << "欢迎使用数学口算比赛系统！" << endl;
   cout << "1. 开始比赛" << endl;
-  cout << "2. 查看比赛结果" << endl;
-  cout << "3. 查看个人历史比赛结果" << endl;
-  cout << "4. 单次比赛中，以学校为单位查看学校总成绩" << endl;
-  cout << "5. 设置参赛者年级难度级别" << endl;
+  cout << "2. 查看个人历史比赛结果" << endl;
   cout << "0. 退出" << endl;
 }
 
-Result startCompetition(vector<Question> questions) {
+Record startCompetition(vector<Question> &questions) {
   int score = 0;
   time_t startTime = time(NULL); // 记录开始时间
 
@@ -106,66 +103,32 @@ Result startCompetition(vector<Question> questions) {
   printf("本轮得分：%d\n", score);
   printf("本轮耗时：%d秒\n\n", elapsedTime);
 
-  return Result(score, elapsedTime);
+  return Record(score, elapsedTime);
 }
 
-void startCompetition() {
+void startCompetition(vector<Record> &results) {
   int questionNumber = 5;
-  int totalScore = 0;
-  int totalTime = 0;
 
   vector<Question> simple = generateSimpleQuestions(questionNumber);
-  Result resultSimple = startCompetition(simple);
+  Record resultSimple = startCompetition(simple);
 
   vector<Question> mixed = generateMixedQuestions(questionNumber);
-  Result resultMixed = startCompetition(mixed);
+  Record resultMixed = startCompetition(mixed);
 
-  Result total = resultSimple + resultMixed;
+  Record total = resultSimple + resultMixed;
 
-  printf("比赛结束！\n");
-  printf("总得分：%d\n", total.score);
-  printf("总耗时：%d秒\n", total.elapsedTime);
+  cout << "比赛结束！" << endl;
+  cout << "总得分：" << total.score << endl;
+  cout << "总耗时：" << total.elapsedTime << "秒" << endl;
+
+  results.push_back(total);
 }
 
-void viewResults() {
-  printf("查看比赛结果！\n");
-  // 调用结果模块的函数来显示比赛结果
-  displayResult();
-  printf("\n按任意键返回主菜单...");
-  getchar();
-  getchar();
-}
-
-void viewPersonalHistory() {
-  printf("查看个人历史比赛结果！\n");
-  // 调用结果模块的函数来显示个人历史比赛结果
-  displayPersonalHistory();
-  printf("\n按任意键返回主菜单...");
-  getchar();
-  getchar();
-}
-
-void viewSchoolResults() {
-  printf("单次比赛中，以学校为单位查看学校总成绩！\n");
-  // 调用结果模块的函数来显示学校总成绩和排名
-  displaySchoolResults();
-  printf("\n按任意键返回主菜单...");
-  getchar();
-  getchar();
-}
-
-void setDifficultyLevel() {
-  printf("设置参赛者年级难度级别！\n");
-  // 调用用户模块的函数来设置参赛者年级难度级别
-  printf("\n按任意键返回主菜单...");
-  getchar();
-  getchar();
-}
-
-void setQuestionTime() {
-  printf("设置每题的答题时间！\n");
-  // 调用比赛模块的函数来设置每题的答题时间
-  printf("\n按任意键返回主菜单...");
-  getchar();
-  getchar();
+void viewPersonalHistory(User &user,vector<Record> &records) {
+  // 从文件获取个人历史比赛结果并显示
+  cout << user.username << " 的个人历史比赛结果：" <<endl;
+  for (int i = 0; i < records.size(); i++) {
+    Record &r = records[i];
+    cout << "比赛[" << i + 1 << "] 得分：" << r.score << " 耗时：" << r.elapsedTime << "秒" << endl;
+  }
 }
