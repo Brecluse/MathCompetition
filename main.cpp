@@ -5,7 +5,7 @@
 
 int main()
 {
-    srand(time(0));
+    srand(time(NULL));
     vector<User> users;
     User::readFromFile(users, "users.bin");
     User user = loginOrSignup(users);
@@ -15,9 +15,8 @@ int main()
     {
         int choice;
         displayMainMenu(); // 显示主菜单
-        printf("请输入选项：");
-
-        scanf("%d", &choice);
+        cout << "请输入选项：";
+        cin >> choice;
         if (choice == 0)
         {
             break;
