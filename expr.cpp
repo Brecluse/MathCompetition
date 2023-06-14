@@ -4,9 +4,13 @@
 using namespace std;
 
 bool eval_expr(const char **pe, int &lhs, bool inside = false);
+
 char skip_ws(const char **pe);
+
 bool eval_prim(const char **pe, int &res);
+
 bool eval_term(const char **pe, int &res);
+
 bool eval_factor(const char **pe, int &res);
 
 char skip_ws(const char **pe) {

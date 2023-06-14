@@ -106,8 +106,8 @@ Record startCompetition(vector<Question> &questions) {
   return Record(score, elapsedTime);
 }
 
-void startCompetition(vector<Record> &results) {
-  int questionNumber = 5;
+void startCompetition(User &user, vector<Record> &results) {
+  int questionNumber = 4 + user.grade;
 
   vector<Question> simple = generateSimpleQuestions(questionNumber);
   Record resultSimple = startCompetition(simple);
@@ -124,9 +124,13 @@ void startCompetition(vector<Record> &results) {
   results.push_back(total);
 }
 
-void viewPersonalHistory(User &user,vector<Record> &records) {
+void viewPersonalHistory(User &user, vector<Record> &records) {
+  if(records.empty()){
+    cout << user.username << " 没有参赛记录。" << endl;
+    return;
+  }
   // 从文件获取个人历史比赛结果并显示
-  cout << user.username << " 的个人历史比赛结果：" <<endl;
+  cout << user.username << " 的个人历史比赛结果：" << endl;
   for (int i = 0; i < records.size(); i++) {
     Record &r = records[i];
     cout << "比赛[" << i + 1 << "] 得分：" << r.score << " 耗时：" << r.elapsedTime << "秒" << endl;

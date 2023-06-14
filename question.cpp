@@ -40,6 +40,11 @@ Question Question::generateSimple() {
       break;
     case 3:
       op = '/';
+      // Ensure operand2 isn't 0.
+      while (operand2 == 0) {
+        operand2 = rand() % 21;
+      }
+
       // Ensure that operand1 is evenly divisible
       operand1 = operand2 * (rand() % 21); // Random multiple of operand2
       break;
@@ -51,10 +56,6 @@ Question Question::generateSimple() {
   return Question(expression, result);
 }
 
-// Function to generate a random integer within a given range
-int getRandomInt(int min, int max) {
-  return min + rand() % (max - min + 1);
-}
 Question Question::generateMixed() {
   std::ostringstream oss;
   int numOperands = rand() % 2 + 3;  // Random number of operands between 3 and 4

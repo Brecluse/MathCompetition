@@ -1,5 +1,6 @@
 #ifndef USER_H
 #define USER_H
+
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -7,16 +8,18 @@
 
 using namespace std;
 
-struct User
-{
-    string username;
-    int grade;
-    string school;
+struct User {
+  string username;
+  int grade;
+  string school;
 
-    void serialize(ofstream &stream) const;
-    void deserialize(ifstream &stream);
+  void serialize(ofstream &stream) const;
 
-    static void saveToFile(const vector<User> &users, const string &filename);
-    static void readFromFile(vector<User> &users, const string &filename);
+  void deserialize(ifstream &stream);
+
+  static void saveToFile(const vector<User> &users, const string &filename);
+
+  static void readFromFile(vector<User> &users, const string &filename);
 };
+
 #endif

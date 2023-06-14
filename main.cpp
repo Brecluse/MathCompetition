@@ -33,7 +33,7 @@ int main() {
     }
     switch (choice) {
       case 1:
-        startCompetition(records); // 开始比赛
+        startCompetition(user, records); // 开始比赛
         Record::saveToFile(records, recordsPath);
         break;
       case 2:
@@ -44,7 +44,8 @@ int main() {
         break;
     }
 
-    printf("\n按任意键继续...");
+    printf("按任意键继续...");
+    getchar();
     getchar();
     clearScreen();     // 清空终端显示
   };

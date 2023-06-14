@@ -26,7 +26,7 @@ void User::deserialize(ifstream &stream) {
   stream.read(const_cast<char *>(school.data()), schoolSize);
 }
 
-void User::saveToFile(const vector <User> &users, const string &filename) {
+void User::saveToFile(const vector<User> &users, const string &filename) {
   // Save the vector of User structs to a file
   ofstream file(filename.c_str(), ios::binary);
   if (file.is_open()) {
@@ -43,7 +43,7 @@ void User::saveToFile(const vector <User> &users, const string &filename) {
   }
 }
 
-void User::readFromFile(vector <User> &users, const string &filename) {
+void User::readFromFile(vector<User> &users, const string &filename) {
   // Read the vector of User structs from a file
   ifstream file(filename.c_str(), ios::binary);
   if (file.is_open()) {

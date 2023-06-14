@@ -2,7 +2,9 @@
 #define EXPR_H
 
 #include <string>
+
 using namespace std;
 
-double evalExpr(const string& expr);
+double evalExpr(const string &expr);
+
 #endif  // EXPR_H
