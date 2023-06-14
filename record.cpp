@@ -13,7 +13,7 @@ void Record::deserialize(ifstream &stream) {
 }
 
 void Record::saveToFile(const vector<Record> &records, const string &filename) {
-  ofstream file(filename, ios::binary);
+  ofstream file(filename.c_str(), ios::binary);
   if (file.is_open()) {
     for (size_t i = 0; i < records.size(); i++) {
       records[i].serialize(file);
@@ -23,7 +23,7 @@ void Record::saveToFile(const vector<Record> &records, const string &filename) {
 }
 
 void Record::readFromFile(vector<Record> &records, const string &filename) {
-  ifstream file(filename, ios::binary);
+  ifstream file(filename.c_str(), ios::binary);
   if (file.is_open()) {
     while (file.peek() != EOF) {
       Record record;

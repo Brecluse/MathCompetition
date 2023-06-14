@@ -7,29 +7,27 @@
 	<File>user.cpp</File>
 	<File>question.cpp</File>
 	<File>ui.cpp</File>
-	<File>result.cpp</File>
 	<File>main.cpp</File>
 	<File>expr.cpp</File>
+	<File>record.cpp</File>
 </Folder>
 <Folder name="Header Files">
 	<File>question.h</File>
 	<File>user.h</File>
 	<File>ui.h</File>
-	<File>result.h</File>
 	<File>expr.h</File>
+	<File>record.h</File>
 </Folder>
 <Folder name="Other Files">
 </Folder>
 <Attribute topline="1" x="88" y="7">user.cpp</Attribute>
 <Attribute topline="37" x="23" y="54">question.cpp</Attribute>
 <Attribute topline="83" x="52" y="89">ui.cpp</Attribute>
-<Attribute topline="91" x="1" y="61">result.cpp</Attribute>
 <Attribute topline="30" x="1" y="28">main.cpp</Attribute>
 <Attribute topline="23" x="1" y="42">expr.cpp</Attribute>
 <Attribute topline="10" x="1" y="14">question.h</Attribute>
 <Attribute topline="13" x="12" y="10">user.h</Attribute>
 <Attribute topline="1" x="6" y="13">ui.h</Attribute>
-<Attribute topline="1" x="3" y="15">result.h</Attribute>
 <Attribute topline="1" x="1" y="14">expr.h</Attribute>
 <FolderState>111</FolderState>
 <Breakpoint>
