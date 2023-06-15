@@ -68,7 +68,8 @@ User loginOrSignup(vector<User> &users) {
 void displayMainMenu() {
   cout << "欢迎使用数学口算比赛系统！" << endl;
   cout << "1. 开始比赛" << endl;
-  cout << "2. 查看个人历史比赛结果" << endl;
+  cout << "2. 查看个人比赛记录" << endl;
+  cout << "3. 查看个人答题记录" << endl;
   cout << "0. 退出" << endl;
 }
 
@@ -95,7 +96,7 @@ Record startCompetition(vector<Question> &questions) {
     } else {
       score -= 5; // 做错一题减5分
       cout << "正确答案是 " << q.result << endl;
-      answered.push_back(QuestionRecord(q, true));
+      answered.push_back(QuestionRecord(q, false));
     }
   }
 
@@ -137,5 +138,28 @@ void viewPersonalHistory(User &user, vector<Record> &records) {
   for (int i = 0; i < records.size(); i++) {
     Record &r = records[i];
     cout << "比赛[" << i + 1 << "] 得分：" << r.score << " 耗时：" << r.elapsedTime << "秒" << endl;
+  }
+}
+
+void viewAnswersHistory(User &user, vector<Record> &records) {
+  if (records.empty()) {
+    cout << user.username << " 没有答题记录。" << endl;
+    return;
+  }
+  // 从文件获取个人历史比赛结果并显示
+  cout << user.username << " 的答题记录：" << endl;
+  for (int i = 0; i < records.size(); i++) {
+    Record &r = records[i];
+    cout << "比赛[" << i + 1 << "]：" << endl;
+    for (int j = 0; j < r.answered.size(); ++j) {
+      QuestionRecord &qr = r.answered[j];
+      if (qr.correct) {
+        cout << "√ ";
+      } else {
+        cout << "x ";
+      }
+      cout << "[" << j << "] ";
+      cout << qr.question.expr << " = " << qr.question.result << endl;
+    }
   }
 }

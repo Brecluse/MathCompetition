@@ -15,4 +15,6 @@ void startCompetition(User &user, vector<Record> &results);
 
 void viewPersonalHistory(User &user, vector<Record> &records);
 
+void viewAnswersHistory(User &user, vector<Record> &records);
+
 #endif
