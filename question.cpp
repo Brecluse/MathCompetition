@@ -97,6 +97,23 @@ Question Question::generateMixed() {
   return Question(expr, result);
 }
 
+void Question::serialize(ofstream &stream) const {
+  size_t exprSize = expr.size();
+  stream.write(reinterpret_cast<const char *>(&exprSize), sizeof(exprSize));
+  stream.write(expr.c_str(), exprSize);
+
+  stream.write(reinterpret_cast<const char *>(&result), sizeof(result));
+}
+
+void Question::deserialize(ifstream &stream) {
+  size_t exprSize;
+  stream.read(reinterpret_cast<char *>(&exprSize), sizeof(exprSize));
+  expr.resize(exprSize);
+  stream.read(const_cast<char *>(expr.data()), exprSize);
+
+  stream.read(reinterpret_cast<char *>(&result), sizeof(result));
+}
+
 vector<Question> generateSimpleQuestions(int number) {
   vector<Question> questions;
   for (int i = 0; i < number; i++) {

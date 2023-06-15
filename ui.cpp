@@ -76,6 +76,7 @@ Record startCompetition(vector<Question> &questions) {
   int score = 0;
   time_t startTime = time(NULL); // 记录开始时间
 
+  vector<QuestionRecord> answered;
   for (int i = 0; i < questions.size(); i++) {
     clearScreen();
     printf("===== 四则简单运算比赛 =====\n");
@@ -90,9 +91,11 @@ Record startCompetition(vector<Question> &questions) {
 
     if (q.result == userAnswer) {
       score += 5; // 做对一题加5分
+      answered.push_back(QuestionRecord(q, true));
     } else {
       score -= 5; // 做错一题减5分
       cout << "正确答案是 " << q.result << endl;
+      answered.push_back(QuestionRecord(q, true));
     }
   }
 
@@ -103,7 +106,7 @@ Record startCompetition(vector<Question> &questions) {
   printf("本轮得分：%d\n", score);
   printf("本轮耗时：%d秒\n\n", elapsedTime);
 
-  return Record(score, elapsedTime);
+  return Record(score, elapsedTime, answered);
 }
 
 void startCompetition(User &user, vector<Record> &results) {
